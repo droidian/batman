@@ -1,4 +1,2 @@
 usr/bin/batman
-usr/bin/batman-helper
-usr/bin/governor
 var/lib/batman/config
