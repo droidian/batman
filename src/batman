@@ -474,8 +474,20 @@ if [ "${CPUSAVEGOVERNOR}" = "powersave" ]; then
     function default() {
         for ((i=CORE_FIRST; i<=CORE_LAST; i++))
         do
-            echo "${DEFAULT_GOVERNOR}" > /sys/devices/system/cpu/cpu$i/cpufreq/scaling_governor
+            if [ -z "${FIRSTPOL}" ] || [ ${i} -lt ${FIRSTPOLCORE} ] || [ ${i} -gt ${LASTPOLCORE} ]; then
+                # Only touch cores in the big cluster. On some SoCs such
+                # as msm8998 the LITTLE cluster needs to be spooled up last
+                echo "${DEFAULT_GOVERNOR}" > /sys/devices/system/cpu/cpu$i/cpufreq/scaling_governor
+            fi
         done
+
+        if [ -n "${FIRSTPOL}" ]; then
+            # Finally change governor on the LITTLE cluster
+            for ((i=FIRSTPOLCORE; i<=LASTPOLCORE; i++))
+            do
+                echo "${DEFAULT_GOVERNOR}" > /sys/devices/system/cpu/cpu$i/cpufreq/scaling_governor
+            done
+        fi
     }
 elif [ "${CPUSAVEGOVERNOR}" = "userspace" ]; then
     function default() {
