@@ -438,10 +438,12 @@ fi
 # like to set governor to userspace and set scaling_min_freq to scaling_setspeed to get the minimum frequency at idle.
 if [ "${CPUSAVEGOVERNOR}" = "powersave" ]; then
     function powersave() {
+        echo 0 > /sys/module/msm_thermal/core_control/enabled
         for ((i=CORE_FIRST; i<=CORE_LAST; i++))
         do
             echo "${CPUSAVEGOVERNOR}" > /sys/devices/system/cpu/cpu$i/cpufreq/scaling_governor
         done
+        echo 1 > /sys/module/msm_thermal/core_control/enabled
     }
 elif [ "${CPUSAVEGOVERNOR}" = "userspace" ]; then
     function powersave() {
@@ -472,6 +474,7 @@ fi
 # same story as above basically
 if [ "${CPUSAVEGOVERNOR}" = "powersave" ]; then
     function default() {
+        echo 0 > /sys/module/msm_thermal/core_control/enabled
         for ((i=CORE_FIRST; i<=CORE_LAST; i++))
         do
             if [ -z "${FIRSTPOL}" ] || [ ${i} -lt ${FIRSTPOLCORE} ] || [ ${i} -gt ${LASTPOLCORE} ]; then
@@ -488,6 +491,7 @@ if [ "${CPUSAVEGOVERNOR}" = "powersave" ]; then
                 echo "${DEFAULT_GOVERNOR}" > /sys/devices/system/cpu/cpu$i/cpufreq/scaling_governor
             done
         fi
+        echo 1 > /sys/module/msm_thermal/core_control/enabled
     }
 elif [ "${CPUSAVEGOVERNOR}" = "userspace" ]; then
     function default() {
