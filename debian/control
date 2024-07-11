@@ -24,6 +24,7 @@ Architecture: any
 Depends: ${misc:Depends},
          bash,
          batman-helper,
+         batman-libpower,
          batman-governor,
          libbatman-wrappers,
 Description: batman
