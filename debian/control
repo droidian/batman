@@ -27,6 +27,7 @@ Depends: ${misc:Depends},
          batman-libpower,
          batman-governor,
          libbatman-wrappers,
+Provides: droidian-power-management
 Description: batman
  A battery management service for Linux phones
 
