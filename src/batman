@@ -85,10 +85,21 @@ elif [ -f /var/lib/batman/config ]; then
 fi
 
 if [ -n "${CONFIG_FILE}" ]; then
-   echo "Parsing ${CONFIG_FILE}"
-   source <(tail -n +2 "${CONFIG_FILE}")
+    echo "Parsing ${CONFIG_FILE}"
+    while read line; do
+        if ! [[ $line == *=* ]]; then
+            continue
+        fi
+        declare \
+            $(echo "$line" | cut -d= -f1)=$(
+                echo "$line" | \
+                cut -d= -f2- | \
+                sed \
+                    -e "s|\"||g" \
+                    -e "s|'||g")
+    done < $CONFIG_FILE
 else
-   echo "config file does not exist. using default values"
+    echo "config file does not exist. using default values"
 fi
 
 # Check if there are any policies available.
