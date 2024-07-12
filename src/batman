@@ -666,6 +666,8 @@ function btdefault {
 echo "" > /var/lib/batman/screen
 
 chown -R "${UIDS}":"${UIDS}" /var/lib/batman
+chown root:root /var/lib/batman/config
+chmod 644 /var/lib/batman/config
 
 while true
 do
