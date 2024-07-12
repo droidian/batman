@@ -795,7 +795,6 @@ do
           delay 0.3
        else
           delay 10
-          source <(tail -n +2 "${CONFIG_FILE}")
        fi
     else
        delay 0.3
